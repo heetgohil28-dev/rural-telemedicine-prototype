@@ -10,6 +10,7 @@ from streamlit.testing.v1 import AppTest
 def db_path():
     path = os.path.join(tempfile.mkdtemp(), "test.db")
     os.environ["DB_PATH"] = path
+    os.environ["DOCTOR_PASSWORD"] = "test-secret-123"
     yield path
 
 
@@ -39,3 +40,11 @@ def test_wrong_doctor_password_is_rejected():
     at.sidebar.radio[0].set_value("Doctor Panel").run()
     at.text_input[0].input("wrong-password").run()
     assert len(at.warning) == 1
+
+def test_correct_doctor_password_opens_panel():
+    at = AppTest.from_file("app.py", default_timeout=30).run()
+    at.sidebar.radio[0].set_value("Doctor Panel").run()
+    at.text_input[0].input("test-secret-123").run()
+    assert not at.exception
+    assert len(at.warning) == 0
+    assert len(at.tabs) == 2

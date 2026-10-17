@@ -73,11 +73,13 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sh '''
-                docker rm -f telemed || true
-                docker run -d --name telemed --network ${NET} --restart unless-stopped \
-                  -p 8501:8501 -v telemed-data:/data ${APP_NAME}:${BUILD_NUMBER}
-                '''
+                withCredentials([string(credentialsId: 'doctor-password', variable: 'DOCTOR_PASSWORD')]) {
+                    sh '''
+                    docker rm -f telemed || true
+                    docker run -d --name telemed --network ${NET} --restart unless-stopped \
+                      -e DOCTOR_PASSWORD -p 8501:8501 -v telemed-data:/data ${APP_NAME}:${BUILD_NUMBER}
+                    '''
+                }
             }
         }
 

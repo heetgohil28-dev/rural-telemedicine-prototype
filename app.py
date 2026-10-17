@@ -1,3 +1,4 @@
+import hmac
 import os
 import re
 import sqlite3
@@ -5,7 +6,7 @@ import streamlit as st
 
 st.set_page_config(page_title="Rural Telemedicine", page_icon="🏥")
 
-DOCTOR_PASSWORD = "doctor123"   # demo only
+DOCTOR_PASSWORD = os.environ.get("DOCTOR_PASSWORD", "")
 DB_FILE = os.environ.get("DB_PATH", "telemed.db")
 SLOTS = ["10:00 AM", "11:00 AM", "2:00 PM", "4:00 PM"]
 
@@ -116,7 +117,7 @@ else:
     pw = st.text_input(t["pw"], type="password")
     if pw == "":
         pass
-    elif pw != DOCTOR_PASSWORD:
+    elif not hmac.compare_digest(pw.encode(), DOCTOR_PASSWORD.encode()):
         st.warning(t["wrong"])
     else:
         tab_pending, tab_done = st.tabs([t["pending"], t["completed"]])

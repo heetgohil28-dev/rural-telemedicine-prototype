@@ -1,4 +1,4 @@
-
+﻿
 \# Rural Telemedicine Prototype
 
 
@@ -19,7 +19,7 @@ streamlit run app.py
 
 
 
-Doctor panel password (demo only): doctor123
+Doctor panel password: set the DOCTOR_PASSWORD environment variable (a Jenkins secret in the pipeline).
 
 
 
