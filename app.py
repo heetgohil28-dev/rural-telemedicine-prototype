@@ -1,3 +1,4 @@
+import os
 import re
 import sqlite3
 import streamlit as st
@@ -5,7 +6,7 @@ import streamlit as st
 st.set_page_config(page_title="Rural Telemedicine", page_icon="🏥")
 
 DOCTOR_PASSWORD = "doctor123"   # demo only
-DB_FILE = "telemed.db"
+DB_FILE = os.environ.get("DB_PATH", "telemed.db")
 SLOTS = ["10:00 AM", "11:00 AM", "2:00 PM", "4:00 PM"]
 
 
