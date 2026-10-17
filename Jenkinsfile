@@ -71,6 +71,21 @@ pipeline {
             }
         }
 
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DH_USER', passwordVariable: 'DH_PASS')]) {
+                    sh '''
+                    echo "$DH_PASS" | docker login -u "$DH_USER" --password-stdin
+                    docker tag ${APP_NAME}:${BUILD_NUMBER} $DH_USER/${APP_NAME}:${BUILD_NUMBER}
+                    docker tag ${APP_NAME}:${BUILD_NUMBER} $DH_USER/${APP_NAME}:latest
+                    docker push $DH_USER/${APP_NAME}:${BUILD_NUMBER}
+                    docker push $DH_USER/${APP_NAME}:latest
+                    docker logout
+                    '''
+                }
+            }
+        }
+
         stage('Deploy') {
             steps {
                 withCredentials([string(credentialsId: 'doctor-password', variable: 'DOCTOR_PASSWORD')]) {
