@@ -4,9 +4,14 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     DB_PATH=/data/telemed.db
 
+RUN apt-get update \
+ && apt-get upgrade -y --no-install-recommends \
+ && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip \
+ && pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 
 RUN useradd --create-home appuser && mkdir /data && chown appuser /data

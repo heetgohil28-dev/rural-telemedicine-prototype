@@ -55,7 +55,7 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t ${APP_NAME}:${BUILD_NUMBER} -t ${APP_NAME}:latest .'
+                sh 'docker build --pull -t ${APP_NAME}:${BUILD_NUMBER} -t ${APP_NAME}:latest .'
             }
         }
 
