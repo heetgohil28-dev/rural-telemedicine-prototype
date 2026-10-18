@@ -46,11 +46,23 @@ resource "aws_security_group" "web" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Outbound is limited to web ports for image pulls, OS updates and AWS APIs.
+  # AWS-0104 is accepted: the destination IPs are not fixed (Docker Hub, Ubuntu mirrors, AWS endpoints).
+  #trivy:ignore:AVD-AWS-0104
   egress {
-    description = "Outbound for package and image downloads"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    description = "HTTPS for image pulls, updates and AWS APIs"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  #trivy:ignore:AVD-AWS-0104
+  egress {
+    description = "HTTP for OS package mirrors"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
