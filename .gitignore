@@ -7,3 +7,6 @@ __pycache__/
 *.tfstate
 *.tfstate.*
 terraform.tfvars
+reports/
+reports-ci/
+reports-ci*/

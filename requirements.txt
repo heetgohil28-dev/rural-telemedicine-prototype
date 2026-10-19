@@ -1,4 +1,2 @@
 streamlit==1.64.0
 urllib3>=2.8.0
-msgpack>=1.2.1
-setuptools>=83.0.0
