@@ -10,3 +10,5 @@ terraform.tfvars
 reports/
 reports-ci/
 reports-ci*/
+reports-ci*/
+summarize.py
