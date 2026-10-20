@@ -30,19 +30,24 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                    sh '''
-                    docker run --rm --network ${NET} --volumes-from ${CI_CONTAINER} -w "$WORKSPACE" \
-                      -e SONAR_HOST_URL -e SONAR_TOKEN \
-                      sonarsource/sonar-scanner-cli sonar-scanner \
-                      -Dsonar.projectBaseDir="$WORKSPACE" -Dsonar.qualitygate.wait=true
-                    '''
-                }
-            }
+       ```groovy
+stage('SonarQube Analysis') {
+    steps {
+        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+            sh '''
+            docker run --rm --network ${NET} --volumes-from ${CI_CONTAINER} -w "$WORKSPACE" \
+              -e SONAR_HOST_URL -e SONAR_TOKEN \
+              sonarsource/sonar-scanner-cli sonar-scanner \
+              -Dsonar.projectKey=Rural-Telemedicine \
+              -Dsonar.projectName=Rural-Telemedicine \
+              -Dsonar.projectBaseDir="$WORKSPACE" \
+              -Dsonar.qualitygate.wait=true
+            '''
         }
+    }
+}
 
+  
         stage('Trivy Filesystem Scan') {
             steps {
                 sh '''
@@ -120,7 +125,11 @@ pipeline {
             sh 'docker logout || true'
             archiveArtifacts artifacts: 'reports/**', allowEmptyArchive: true
         }
-        success { echo 'Pipeline finished successfully.' }
-        failure { echo 'Pipeline failed. Check the stage logs.' }
+        success {
+            echo 'Pipeline finished successfully.'
+        }
+        failure {
+            echo 'Pipeline failed. Check the stage logs.'
+        }
     }
 }
