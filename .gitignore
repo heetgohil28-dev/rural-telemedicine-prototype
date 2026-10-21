@@ -12,3 +12,15 @@ reports-ci/
 reports-ci*/
 reports-ci*/
 summarize.py
+
+# Terraform generated files
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+tf-before/
+
+# Secrets
+.env
+*.pem
